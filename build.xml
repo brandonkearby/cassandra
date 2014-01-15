@@ -356,7 +356,7 @@
           <dependency groupId="com.googlecode.json-simple" artifactId="json-simple" version="1.1"/>
           <dependency groupId="com.github.stephenc.high-scale-lib" artifactId="high-scale-lib" version="1.1.2"/>
           <dependency groupId="com.github.stephenc" artifactId="jamm" version="0.2.5"/>
-	   <dependency groupId="com.thinkaurelius.thrift" artifactId="thrift-server" version="0.3.2"/>
+	   <dependency groupId="com.thinkaurelius.thrift" artifactId="thrift-server" version="0.3.3"/>
           <dependency groupId="org.yaml" artifactId="snakeyaml" version="1.11"/>
           <dependency groupId="org.apache.thrift" artifactId="libthrift" version="0.9.1"/>
 
@@ -458,7 +458,7 @@
         <dependency groupId="org.mindrot" artifactId="jbcrypt"/>
         <dependency groupId="com.yammer.metrics" artifactId="metrics-core"/>
         <dependency groupId="com.addthis.metrics" artifactId="reporter-config"/>
-        <dependency groupId="com.thinkaurelius.thrift" artifactId="thrift-server" version="0.3.2"/>
+        <dependency groupId="com.thinkaurelius.thrift" artifactId="thrift-server" version="0.3.3"/>
 
         <dependency groupId="log4j" artifactId="log4j"/>
         <!-- cassandra has a hard dependency on log4j, so force slf4j's log4j provider at runtime -->
@@ -1405,4 +1405,21 @@
             file="${build.dir}/${final.name}-javadoc.jar"
             classifier="javadoc"/>
   </target>
+
+    <target name="jarjar">
+        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="./jarjar-1.4.jar"/>
+        <jarjar jarfile="apache-cassandra-2.0.4-cdh4.jar">
+            <zipgroupfileset dir="${build.dir}" includes="*.jar"/>
+            <zipgroupfileset dir="lib" includes="libthrift-0.9.1.jar"/>
+            <!--<rule pattern="org.apache.cassandra.thrift.**" result="dgshaded.org.apache.cassandra.thrift.@1"/>-->
+            <!--<rule pattern="org.apache.thrift.**" result="dgshaded.org.apache.thrift.@1"/>-->
+<!--
+            <rule pattern="org.antlr.**" result="dgshaded.org.antlr.@1"/>
+            <rule pattern="com.google.**" result="dgshaded.com.google.@1"/>
+            <rule pattern="org.apache.avro.**" result="dgshaded.org.apache.avro.@1"/>
+            <rule pattern="org.apache.commons.**" result="dgshaded.org.apache.commons.@1"/>
+-->
+        </jarjar>
+    </target>
+
 </project>
